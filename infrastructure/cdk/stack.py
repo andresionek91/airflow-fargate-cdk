@@ -1,4 +1,6 @@
 from aws_cdk import core
+from defaults import deploy_env, default_removal_policy
+from components.ecs import ECSTaskRole, ECSLogGroup
 
 
 class AirflowStack(core.Stack):
@@ -7,4 +9,13 @@ class AirflowStack(core.Stack):
         scope: core.Construct,
         **kwargs,
     ) -> None:
-        super().__init__(scope, id=f"{self.deploy_env.value}-airflow-stack", **kwargs)
+        self.deploy_env = deploy_env
+        self.default_removal_policy = default_removal_policy
+        super().__init__(scope, id=f"{self.deploy_env}-airflow-stack", **kwargs)
+
+        ECSTaskRole(self, deploy_env=self.deploy_env)
+        ECSLogGroup(
+            self,
+            deploy_env=self.deploy_env,
+            default_removal_policy=default_removal_policy,
+        )
