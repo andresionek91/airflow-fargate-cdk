@@ -12,7 +12,7 @@ A comprehensive Makefile is available to execute common tasks. Run the following
 make help
 ```
 
-###  Run it locally
+###  Local Development
 ```
 make airflow-local-up
 ```
