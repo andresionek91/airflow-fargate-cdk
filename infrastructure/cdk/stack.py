@@ -1,5 +1,5 @@
 from aws_cdk import core
-from defaults import deploy_env, default_removal_policy
+from configs import deploy_env, default_removal_policy
 from components.ecs import ECSTaskRole, ECSLogGroup
 
 
