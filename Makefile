@@ -29,5 +29,4 @@ dev-install-local: ## Local install of the project and pre-commit using Poetry. 
 
 .PHONY: dev-test-local
 dev-test-local: ## Run local tests
-	export DEPLOY_ENV=test && cdk synth --quiet
-	poetry run pytest
+	export DEPLOY_ENV=test && poetry run python -m pytest -v

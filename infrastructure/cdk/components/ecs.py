@@ -12,6 +12,7 @@ class ECSTaskRole(iam.Role):
         super().__init__(
             scope,
             id=f"{self.name_convention_prefix}-role",
+            role_name=f"{self.name_convention_prefix}-role",
             assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
             description="Role to allow ECS tasks to access ECR",
         )
