@@ -1,6 +1,6 @@
 # Airflow 2.0 Fargate CDK
 
-Deploy of Airflow using ECS Fargate and AWS CDK.
+Deploy of Airflow 2.0 using ECS Fargate and AWS CDK.
 
 Uses Airflow image from [Bitnami](https://github.com/bitnami/bitnami-docker-airflow).
 
@@ -13,10 +13,9 @@ make help
 ```
 
 ###  Local Development
-```
-make airflow-local-up
-```
-Available on `0.0.0.0:8080`
+To bring Airflow up do `make airflow-local-up`
+
+It will be available on `0.0.0.0:8080`
 
 Credentials are set with environment variables in `docker-compose.yml`
 ```
@@ -25,10 +24,7 @@ AIRFLOW_PASSWORD: Airflow application password. Default: Sionek123
 AIRFLOW_EMAIL: Airflow application email. Default: user@example.com
 ```
 
-To shut it down:
-```
-make airflow-local-down
-```
+To shut it down do `make airflow-local-down`
 
 ## AWS CDK Development
 If you wish to make changes to the infrastructure, you might need to have AWS CDK installed.  
