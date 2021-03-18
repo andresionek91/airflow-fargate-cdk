@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "airflow-fargate-cdk"
+description = "Deploy of Airflow using ECS Fargate and AWS CDK"
+authors = ["Andre Sionek"]
+version = "0.0.1"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.11.1"
+black = "^20.8b1"
+flake8 = "^3.9.0"
+pytest = "^6.2.2"
+
+[tool.black]
+target-version = ['py38']
+line-length = 90
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.github
+  | \.circleci
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \venv
+  | \.venv
+  | \.env
+  | \.eggs
+  | _build
+  | buck-out
+  | build
+  | dist
+  | venv
+)/
+'''

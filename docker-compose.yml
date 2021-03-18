@@ -30,8 +30,8 @@ services:
       - AIRFLOW_LOAD_EXAMPLES=no
     volumes:
       - airflow_scheduler_data:/bitnami
-      - ./dags:/opt/bitnami/airflow/dags
-      - requirements.txt:/bitnami/python/requirements.txt
+      - ./airflow/dags:/opt/bitnami/airflow/dags
+      - ./airflow/airflow-requirements.txt:/bitnami/python/requirements.txt
 
   airflow-worker:
     image: docker.io/bitnami/airflow-worker:2-debian-10
@@ -46,8 +46,8 @@ services:
       - AIRFLOW_LOAD_EXAMPLES=no
     volumes:
       - airflow_worker_data:/bitnami
-      - ./dags:/opt/bitnami/airflow/dags
-      - requirements.txt:/bitnami/python/requirements.txt
+      - ./airflow/dags:/opt/bitnami/airflow/dags
+      - ./airflow/airflow-requirements.txt:/bitnami/python/requirements.txt
 
   airflow:
     image: docker.io/bitnami/airflow:2-debian-10
@@ -64,8 +64,8 @@ services:
       - '8080:8080'
     volumes:
       - airflow_data:/bitnami
-      - ./dags:/opt/bitnami/airflow/dags
-      - requirements.txt:/bitnami/python/requirements.txt
+      - ./airflow/dags:/opt/bitnami/airflow/dags
+      - ./airflow/airflow-requirements.txt:/bitnami/python/requirements.txt
 
 volumes:
   airflow_scheduler_data:
