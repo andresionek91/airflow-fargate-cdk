@@ -9,7 +9,7 @@ class AirflowVPC(ec2.Vpc):
 
     def __init__(self, scope: core.Construct, **kwargs) -> None:
         self.deploy_env = scope.deploy_env
-        self.object_name = f"ec2-{self.deploy_env}-airflow-vpc"
+        self.object_name = f"{self.deploy_env}-airflow-vpc"
         super().__init__(
             scope,
             id=self.object_name,

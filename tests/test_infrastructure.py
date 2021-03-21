@@ -12,10 +12,12 @@ def policies_resources_fixture(template_fixture):
 @pytest.mark.parametrize(
     "resource_name, expected",
     [
-        ("iam-test-ecs-task-role", True),
-        ("iam-test-ecs-task-policy", True),
-        ("logs-test-ecs-log-group", True),
-        ("logs-test-non-existent-resource", False),
+        ("test-airflow-ecs-task-role", True),
+        ("test-airflow-ecs-task-policy", True),
+        ("test-airflow-ecs-log-group", True),
+        ("test-airflow-vpc", True),
+        ("test-airflow-fernet-key-parameter", True),
+        ("non-existent-resource", False),
     ],
 )
 def test_resource_in_template(resource_name, expected, template_fixture):

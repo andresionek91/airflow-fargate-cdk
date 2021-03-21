@@ -12,7 +12,7 @@ class FernetKeySecureParameter(ssm.StringParameter):
 
     def __init__(self, scope: core.Construct, **kwargs) -> None:
         self.deploy_env = scope.deploy_env
-        self.object_name = f"iam-{self.deploy_env}-fernet-key-secret"
+        self.object_name = f"{self.deploy_env}-airflow-fernet-key-parameter"
         self.fernet_key_secret: str = self._create_fernet_key()
         super().__init__(
             scope,

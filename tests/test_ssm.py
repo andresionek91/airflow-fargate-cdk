@@ -8,7 +8,7 @@ class TestFernetKeySecureParameter:
     def setup_ssm(self):
         client = boto3.client("ssm")
         client.put_parameter(
-            Name="iam-test-fernet-key-secret",
+            Name="test-airflow-fernet-key-parameter",
             Value="fetched_fernet_key",
             Type="SecureString",
             Overwrite=True,
@@ -17,7 +17,7 @@ class TestFernetKeySecureParameter:
 
     def teardown_ssm(self):
         client = boto3.client("ssm")
-        client.delete_parameter(Name="iam-test-fernet-key-secret")
+        client.delete_parameter(Name="test-airflow-fernet-key-parameter")
 
     def test_fernet_key_is_fetched_from_ssm(self, app_fixture):
         self.setup_ssm()

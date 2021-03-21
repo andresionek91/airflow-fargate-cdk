@@ -9,17 +9,3 @@ repos:
     rev: 3.7.9
     hooks:
       - id: flake8
-
-  - repo: local
-    hooks:
-      - id: run-tests
-        name: run-tests
-        entry: make dev-test-local
-        language: system
-
-  - repo: local
-    hooks:
-      - id: deploy-local-stack
-        name: deploy-local-stack
-        entry: make dev-deploy-local
-        language: system

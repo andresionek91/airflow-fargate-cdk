@@ -8,7 +8,7 @@ class ECSTaskRole(iam.Role):
 
     def __init__(self, scope: core.Construct, **kwargs) -> None:
         self.deploy_env = scope.deploy_env
-        self.object_name = f"iam-{self.deploy_env}-ecs-task-role"
+        self.object_name = f"{self.deploy_env}-airflow-ecs-task-role"
         super().__init__(
             scope,
             id=self.object_name,
@@ -25,7 +25,7 @@ class ECSTaskPolicy(iam.ManagedPolicy):
 
     def __init__(self, scope: core.Construct, **kwargs) -> None:
         self.deploy_env = scope.deploy_env
-        self.object_name = f"iam-{self.deploy_env}-ecs-task-policy"
+        self.object_name = f"{self.deploy_env}-airflow-ecs-task-policy"
         super().__init__(
             scope,
             id=self.object_name,
@@ -59,7 +59,7 @@ class ECSLogGroup(logs.LogGroup):
 
     def __init__(self, scope: core.Construct, **kwargs) -> None:
         self.deploy_env = scope.deploy_env
-        self.object_name = f"logs-{self.deploy_env}-ecs-log-group"
+        self.object_name = f"{self.deploy_env}-airflow-ecs-log-group"
         super().__init__(
             scope,
             id=self.object_name,
