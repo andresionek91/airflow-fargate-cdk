@@ -20,7 +20,7 @@ dev-fresh-build-local: dev-clean-local dev-install-local dev-test-local ## Clean
 
 .PHONY: dev-clean-local
 dev-clean-local: ## Removes project virtual env
-	rm -rf .venv
+	rm -rf .venv cdk.out */*/*.egg-info .pytest_cache
 
 .PHONY: dev-install-local
 dev-install-local: ## Local install of the project and pre-commit using Poetry. Install AWS CDK package for development.
