@@ -10,10 +10,10 @@ class FernetKeySecureParameter(ssm.StringParameter):
     Creates role to be assumed by ECS tasks
     """
 
-    def __init__(self, scope: core.Construct, deploy_env: str, **kwargs) -> None:
-        self.deploy_env = deploy_env
+    def __init__(self, scope: core.Construct, **kwargs) -> None:
+        self.deploy_env = scope.deploy_env
         self.object_name = f"iam-{self.deploy_env}-fernet-key-secret"
-        self.fernet_key_secret = self._create_fernet_key()
+        self.fernet_key_secret: str = self._create_fernet_key()
         super().__init__(
             scope,
             id=self.object_name,
@@ -24,11 +24,10 @@ class FernetKeySecureParameter(ssm.StringParameter):
             tier=ssm.ParameterTier.STANDARD,
         )
 
-    def _create_fernet_key(self):
+    def _create_fernet_key(self) -> str:
         """
-        Try to find fernet key in AWS Secrets Manager.
-        If resource does not exist, create a new key.
-        Set key as environment variable to be used by CF template.
+        Try to find fernet key in AWS Parameter Store.
+        If it does not exist, then create a new key.
         """
 
         client = boto3.client("ssm", endpoint_url=os.environ.get("AWS_ENDPOINT"))

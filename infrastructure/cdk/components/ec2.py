@@ -7,8 +7,8 @@ class AirflowVPC(ec2.Vpc):
     Creates role to be assumed by ECS tasks
     """
 
-    def __init__(self, scope: core.Construct, deploy_env: str, **kwargs) -> None:
-        self.deploy_env = deploy_env
+    def __init__(self, scope: core.Construct, **kwargs) -> None:
+        self.deploy_env = scope.deploy_env
         self.object_name = f"ec2-{self.deploy_env}-airflow-vpc"
         super().__init__(
             scope,

@@ -22,23 +22,17 @@ class AirflowStack(core.Stack):
         self._apply_default_tags(scope)
         super().__init__(scope, id=f"{self.deploy_env}-airflow-stack", **kwargs)
 
-        self.ecs_task_role = ECSTaskRole(self, deploy_env=self.deploy_env)
-        self.ecs_task_policy = ECSTaskPolicy(self, deploy_env=self.deploy_env)
+        self.ecs_task_role = ECSTaskRole(self)
+        self.ecs_task_policy = ECSTaskPolicy(self)
         self.ecs_task_policy.attach_to_role(self.ecs_task_role)
-        self.ecs_log_group = ECSLogGroup(
-            self,
-            deploy_env=self.deploy_env,
-            default_removal_policy=default_removal_policy,
-        )
+        self.ecs_log_group = ECSLogGroup(self)
 
         if self.import_vpc:
             raise NotImplementedError()
         else:
-            self.airflow_vpc = AirflowVPC(self, deploy_env=deploy_env)
+            self.airflow_vpc = AirflowVPC(self)
 
-        self.fernet_key_secure_parameter = FernetKeySecureParameter(
-            self, deploy_env=deploy_env
-        )
+        self.fernet_key_secure_parameter = FernetKeySecureParameter(self)
 
     def _apply_default_tags(self, scope: core.Construct):
         for key, value in self.default_tags:
