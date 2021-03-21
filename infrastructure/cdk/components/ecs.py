@@ -8,19 +8,28 @@ class ECSTaskRole(iam.Role):
 
     def __init__(self, scope: core.Construct, deploy_env: str, **kwargs) -> None:
         self.deploy_env = deploy_env
-        self.name_convention_prefix = f"iam-{self.deploy_env}-ecs-task"
+        self.object_name = f"iam-{self.deploy_env}-ecs-task-role"
         super().__init__(
             scope,
-            id=f"{self.name_convention_prefix}-role",
-            role_name=f"{self.name_convention_prefix}-role",
+            id=self.object_name,
+            role_name=self.object_name,
             assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
             description="Role to allow ECS tasks to access ECR",
         )
 
-        policy = iam.Policy(
+
+class ECSTaskPolicy(iam.ManagedPolicy):
+    """
+    Creates role to be assumed by ECS tasks
+    """
+
+    def __init__(self, scope: core.Construct, deploy_env: str, **kwargs) -> None:
+        self.deploy_env = deploy_env
+        self.object_name = f"iam-{self.deploy_env}-ecs-task-policy"
+        super().__init__(
             scope,
-            id=f"{self.name_convention_prefix}-policy",
-            policy_name=f"{self.name_convention_prefix}-policy",
+            id=self.object_name,
+            managed_policy_name=self.object_name,
             statements=[
                 iam.PolicyStatement(
                     effect=iam.Effect.ALLOW,
@@ -41,7 +50,6 @@ class ECSTaskRole(iam.Role):
                 ),
             ],
         )
-        self.attach_inline_policy(policy)
 
 
 class ECSLogGroup(logs.LogGroup):
@@ -51,11 +59,11 @@ class ECSLogGroup(logs.LogGroup):
 
     def __init__(self, scope: core.Construct, deploy_env: str, **kwargs) -> None:
         self.deploy_env = deploy_env
-        self.name_convention_prefix = f"logs-{self.deploy_env}-ecs"
+        self.object_name = f"logs-{self.deploy_env}-ecs-log-group"
         super().__init__(
             scope,
-            id=f"{self.name_convention_prefix}-log-group",
-            log_group_name=f"{self.name_convention_prefix}-log-group",
+            id=self.object_name,
+            log_group_name=self.object_name,
             removal_policy=kwargs["default_removal_policy"],
             retention=logs.RetentionDays.THREE_MONTHS,
         )

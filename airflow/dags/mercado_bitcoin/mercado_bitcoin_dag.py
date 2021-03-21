@@ -2,7 +2,6 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.hooks.S3_hook import S3Hook
 import requests
-from airflow.models import Variable
 from backoff import on_exception, constant
 from ratelimit import limits, RateLimitException
 from datetime import datetime
@@ -12,7 +11,10 @@ import json
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-config = Variable.get("mercado_bitcoin_dag", deserialize_json=True)
+config = {
+    "bucket": "s3-belisco-turma-4-develop-data-lake-raw",
+    "coins": ["BCH", "BTC", "ETH", "LTC"],
+}
 
 default_args = {
     "owner": "andresionek91",

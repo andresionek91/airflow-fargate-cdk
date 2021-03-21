@@ -1,21 +1,40 @@
+from typing import List
 from aws_cdk import core
-from configs import deploy_env, default_removal_policy
-from components.ecs import ECSTaskRole, ECSLogGroup
+from components.ecs import ECSTaskRole, ECSLogGroup, ECSTaskPolicy
+from components.ec2 import AirflowVPC
 
 
 class AirflowStack(core.Stack):
     def __init__(
         self,
         scope: core.Construct,
+        deploy_env: str,
+        default_tags: List[dict] = [],
+        default_removal_policy: core.RemovalPolicy = core.RemovalPolicy.DESTROY,
+        import_vpc: bool = False,
         **kwargs,
     ) -> None:
         self.deploy_env = deploy_env
         self.default_removal_policy = default_removal_policy
+        self.default_tags = default_tags
+        self.import_vpc = import_vpc
+        self._apply_default_tags(scope)
         super().__init__(scope, id=f"{self.deploy_env}-airflow-stack", **kwargs)
 
-        ECSTaskRole(self, deploy_env=self.deploy_env)
-        ECSLogGroup(
+        self.ecs_task_role = ECSTaskRole(self, deploy_env=self.deploy_env)
+        self.ecs_task_policy = ECSTaskPolicy(self, deploy_env=self.deploy_env)
+        self.ecs_task_policy.attach_to_role(self.ecs_task_role)
+        self.ecs_log_group = ECSLogGroup(
             self,
             deploy_env=self.deploy_env,
             default_removal_policy=default_removal_policy,
         )
+
+        if self.import_vpc:
+            raise NotImplementedError()
+        else:
+            self.airflow_vpc = AirflowVPC(self, deploy_env=deploy_env)
+
+    def _apply_default_tags(self, scope: core.Construct):
+        for key, value in self.default_tags:
+            core.Tags.of(scope).add(key=key, value=value)

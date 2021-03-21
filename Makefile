@@ -13,6 +13,7 @@ airflow-local-up: ## Runs airflow containers locally using docker-compose. Avail
 .PHONY: airflow-local-down
 airflow-local-down: ## Kill all airflow containers created with docker-compose.
 	docker-compose -f airflow/docker-compose.yml down -v
+	# docker kill $(docker ps --filter name=airflow_ --quiet)
 
 .PHONY: dev-fresh-build-local
 dev-fresh-build-local: dev-clean-local dev-install-local dev-test-local ## Clean environment and reinstall all dependencies
@@ -26,6 +27,7 @@ dev-install-local: ## Local install of the project and pre-commit using Poetry. 
 	poetry install
 	poetry run pre-commit install
 	poetry run pip install -e infrastructure
+	poetry run pip install -r airflow/airflow-requirements.txt
 
 .PHONY: dev-test-local
 dev-test-local: ## Run local tests
