@@ -19,12 +19,11 @@ dev-fresh-build-local: dev-clean-local dev-install-local dev-test-local ## Clean
 
 .PHONY: dev-clean-local
 dev-clean-local: ## Removes project virtual env
-	rm -rf .venv cdk.out */*/*.egg-info .pytest_cache
-	docker kill $(docker ps --filter name=airflow_ --quiet) || true
-	docker kill $(docker ps --filter name=localstack_main --quiet) || true
+	bash scripts/dev_clean_local.sh
 
 .PHONY: dev-install-local
 dev-install-local: ## Local install of the project and pre-commit using Poetry. Install AWS CDK package for development.
+	npm install -g aws-cdk-local aws-cdk
 	poetry install
 	poetry run pre-commit install
 	poetry run pip install -e infrastructure
@@ -33,4 +32,8 @@ dev-install-local: ## Local install of the project and pre-commit using Poetry. 
 
 .PHONY: dev-test-local
 dev-test-local: ## Run local tests
-	export DEPLOY_ENV=test && poetry run python -m pytest -v
+	bash scripts/dev_test_local.sh
+
+.PHONY: dev-deploy-local
+dev-deploy-local: ## Deploy the infrastructure stack to localstack
+	bash scripts/dev_deploy_local.sh

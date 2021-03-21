@@ -2,6 +2,7 @@ import aws_cdk.core as core
 from aws_cdk import aws_ssm as ssm
 import boto3
 from cryptography.fernet import Fernet
+import os
 
 
 class FernetKeySecureParameter(ssm.StringParameter):
@@ -30,7 +31,7 @@ class FernetKeySecureParameter(ssm.StringParameter):
         Set key as environment variable to be used by CF template.
         """
 
-        client = boto3.client("ssm")
+        client = boto3.client("ssm", endpoint_url=os.environ.get("AWS_ENDPOINT"))
 
         try:
             response = client.get_parameter(Name=self.object_name, WithDecryption=True)
