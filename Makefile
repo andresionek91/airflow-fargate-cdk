@@ -13,7 +13,6 @@ airflow-local-up: ## Runs airflow containers locally using docker-compose. Avail
 .PHONY: airflow-local-down
 airflow-local-down: ## Kill all airflow containers created with docker-compose.
 	docker-compose -f airflow/docker-compose.yml down -v
-	# docker kill $(docker ps --filter name=airflow_ --quiet)
 
 .PHONY: dev-fresh-build-local
 dev-fresh-build-local: dev-clean-local dev-install-local dev-test-local ## Clean environment and reinstall all dependencies
@@ -21,6 +20,8 @@ dev-fresh-build-local: dev-clean-local dev-install-local dev-test-local ## Clean
 .PHONY: dev-clean-local
 dev-clean-local: ## Removes project virtual env
 	rm -rf .venv cdk.out */*/*.egg-info .pytest_cache
+	docker kill $(docker ps --filter name=airflow_ --quiet) || true
+	docker kill $(docker ps --filter name=localstack_main --quiet) || true
 
 .PHONY: dev-install-local
 dev-install-local: ## Local install of the project and pre-commit using Poetry. Install AWS CDK package for development.
@@ -28,6 +29,7 @@ dev-install-local: ## Local install of the project and pre-commit using Poetry. 
 	poetry run pre-commit install
 	poetry run pip install -e infrastructure
 	poetry run pip install -r airflow/airflow-requirements.txt
+	ENTRYPOINT=-d poetry run localstack start --docker
 
 .PHONY: dev-test-local
 dev-test-local: ## Run local tests

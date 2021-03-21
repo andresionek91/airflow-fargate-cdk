@@ -6,12 +6,20 @@ version = "0.0.1"
 
 [tool.poetry.dependencies]
 python = "^3.8"
+boto3 = "^1.17.33"
+cryptography = "^3.4.6"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.11.1"
 black = "^20.8b1"
 flake8 = "^3.9.0"
 pytest = "^6.2.2"
+localstack = "^0.12.7"
+moto = "^2.0.2"
+localstack-client = "^1.14"
+Flask-Cors = "^3.0.10"
+h11 = "^0.12.0"
+Quart = "^0.14.1"
 
 [tool.black]
 target-version = ['py38']

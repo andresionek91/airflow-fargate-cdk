@@ -2,6 +2,7 @@ from typing import List
 from aws_cdk import core
 from components.ecs import ECSTaskRole, ECSLogGroup, ECSTaskPolicy
 from components.ec2 import AirflowVPC
+from components.ssm import FernetKeySecureParameter
 
 
 class AirflowStack(core.Stack):
@@ -34,6 +35,10 @@ class AirflowStack(core.Stack):
             raise NotImplementedError()
         else:
             self.airflow_vpc = AirflowVPC(self, deploy_env=deploy_env)
+
+        self.fernet_key_secure_parameter = FernetKeySecureParameter(
+            self, deploy_env=deploy_env
+        )
 
     def _apply_default_tags(self, scope: core.Construct):
         for key, value in self.default_tags:

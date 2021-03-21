@@ -1,19 +1,10 @@
 import json
 import pytest
-from aws_cdk import core
-from stack import AirflowStack
 
 
 @pytest.fixture()
-def fixture_template():
-    app = core.App()
-    AirflowStack(app, deploy_env="test")
-    return app.synth().get_stack("test-airflow-stack").template
-
-
-@pytest.fixture()
-def policies_resources_fixture(fixture_template):
-    for resource_name, resource in fixture_template["Resources"].items():
+def policies_resources_fixture(template_fixture):
+    for resource_name, resource in template_fixture["Resources"].items():
         if resource["Type"] in ["AWS::IAM::Policy", "AWS::IAM::ManagedPolicy"]:
             yield resource
 
@@ -27,8 +18,8 @@ def policies_resources_fixture(fixture_template):
         ("logs-test-non-existent-resource", False),
     ],
 )
-def test_resource_in_template(resource_name, expected, fixture_template):
-    assert (resource_name in json.dumps(fixture_template)) == expected
+def test_resource_in_template(resource_name, expected, template_fixture):
+    assert (resource_name in json.dumps(template_fixture)) == expected
 
 
 def test_if_actions_in_policies_are_open(policies_resources_fixture):
