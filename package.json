@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "aws-cdk": "^1.124.0",
+    "aws-cdk-local": "^1.65.8"
+  }
+}

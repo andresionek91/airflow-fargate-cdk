@@ -8,14 +8,14 @@ help: ## Shows this help text
 
 .PHONY: airflow-local-up
 airflow-local-up: ## Runs airflow containers locally using docker-compose. Available on 0.0.0.0:8080. Usename: user, Password: Sionek123
-	docker-compose -f airflow/docker-compose.yml up -d
+	docker compose -f airflow/docker-compose.yml up -d
 
 .PHONY: airflow-local-down
 airflow-local-down: ## Kill all airflow containers created with docker-compose.
-	docker-compose -f airflow/docker-compose.yml down -v
+	docker compose -f airflow/docker-compose.yml down -v
 
-.PHONY: dev-fresh-build-local
-dev-fresh-build-local: dev-clean-local dev-install-local dev-test-local ## Clean environment and reinstall all dependencies
+.PHONY: init
+init: dev-clean-local dev-install-local dev-test-local ## Clean environment and reinstall all dependencies
 
 .PHONY: dev-clean-local
 dev-clean-local: ## Removes project virtual env
@@ -23,7 +23,7 @@ dev-clean-local: ## Removes project virtual env
 
 .PHONY: dev-install-local
 dev-install-local: ## Local install of the project and pre-commit using Poetry. Install AWS CDK package for development.
-	npm install -g aws-cdk-local aws-cdk
+	npm install aws-cdk-local aws-cdk
 	poetry install
 	poetry run pre-commit install
 	poetry run pip install -e infrastructure

@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 config = {
-    "bucket": "s3-belisco-turma-4-develop-data-lake-raw",
+    "bucket": "s3-belisquito-turma-5-production-data-lake-raw",
     "coins": ["BCH", "BTC", "ETH", "LTC"],
 }
 
@@ -58,7 +58,7 @@ def upload_to_s3(date, coin, **context):
     logger.info(f"Uploading to S3")
     S3Hook(aws_conn_id="aws_default").load_string(
         string_data=string_data,
-        key=f"cryptocurrency_interno/{coin}/execution_date={date}/cryptocurrency_interno_{coin}_{now_string}.json",
+        key=f"mercado_bitcoin/{coin}/execution_date={date}/mercado_bitcoin{coin}_{now_string}.json",
         bucket_name=config["bucket"],
     )
 

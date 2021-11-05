@@ -1,15 +1,25 @@
-from typing import List
 from cdk.stack import AirflowStack
 from aws_cdk import core
-import os
 
-deploy_env: str = os.environ["DEPLOY_ENV"]
-default_tags: List[dict] = [
-    dict(key="deploy_env", value=deploy_env),
-    dict(key="owner", value="Data Engineering"),
-    dict(key="service", value="Airflow"),
-]
+from config import deploy_env, default_tags, whitelisted_ips, default_removal_policy
 
-app = core.App()
-AirflowStack(app, deploy_env=deploy_env, default_tags=default_tags)
-app.synth()
+
+class AirflowApp(core.App):
+    def __init__(self):
+        super().__init__()
+        self.deploy_env = deploy_env
+        self.whitelisted_ips = whitelisted_ips
+        self.default_removal_policy = default_removal_policy
+        self.default_tags = default_tags
+
+    def apply_default_tags(self, stack):
+        for tag in self.default_tags:
+            core.Tags.of(stack).add(key=tag.get("key"), value=tag.get("value"))
+
+
+airflow_app = AirflowApp()
+
+airflow_stack = AirflowStack(airflow_app)
+airflow_app.apply_default_tags(airflow_stack)
+
+airflow_app.synth()

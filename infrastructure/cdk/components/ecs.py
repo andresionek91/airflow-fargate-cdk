@@ -1,69 +1,25 @@
-from aws_cdk import core, aws_iam as iam, aws_logs as logs
+from __future__ import annotations
+
+from aws_cdk import core, aws_iam as iam, aws_logs as logs, aws_ecs as ecs
+
+# To avoid circular dependency when importing AirflowStack
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from stack import AirflowStack
 
 
-class ECSTaskRole(iam.Role):
+class EcsAirflowCluster(ecs.Cluster):
     """
-    Creates role to be assumed by ECS tasks
+    Creates ECS cluster to be used by Airflow
     """
 
-    def __init__(self, scope: core.Construct, **kwargs) -> None:
-        self.deploy_env = scope.deploy_env
-        self.object_name = f"{self.deploy_env}-airflow-ecs-task-role"
+    def __init__(self, stack: AirflowStack, **kwargs) -> None:
+        self.object_name = f"{stack.deploy_env}-airflow-ecs-cluster"
         super().__init__(
-            scope,
+            stack,
             id=self.object_name,
-            role_name=self.object_name,
-            assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
-            description="Role to allow ECS tasks to access ECR",
-        )
-
-
-class ECSTaskPolicy(iam.ManagedPolicy):
-    """
-    Creates role to be assumed by ECS tasks
-    """
-
-    def __init__(self, scope: core.Construct, **kwargs) -> None:
-        self.deploy_env = scope.deploy_env
-        self.object_name = f"{self.deploy_env}-airflow-ecs-task-policy"
-        super().__init__(
-            scope,
-            id=self.object_name,
-            managed_policy_name=self.object_name,
-            statements=[
-                iam.PolicyStatement(
-                    effect=iam.Effect.ALLOW,
-                    actions=[
-                        "ecr:GetAuthorizationToken",
-                        "ecr:BatchCheckLayerAvailability",
-                        "ecr:GetDownloadUrlForLayer",
-                        "ecr:BatchGetImage",
-                    ],
-                    resources=["*"],
-                ),
-                iam.PolicyStatement(
-                    effect=iam.Effect.ALLOW,
-                    actions=["logs:CreateLogStream", "logs:PutLogEvents"],
-                    resources=[
-                        "*",
-                    ],
-                ),
-            ],
-        )
-
-
-class ECSLogGroup(logs.LogGroup):
-    """
-    Creates log group to be used by ECS tasks
-    """
-
-    def __init__(self, scope: core.Construct, **kwargs) -> None:
-        self.deploy_env = scope.deploy_env
-        self.object_name = f"{self.deploy_env}-airflow-ecs-log-group"
-        super().__init__(
-            scope,
-            id=self.object_name,
-            log_group_name=self.object_name,
-            removal_policy=scope.default_removal_policy,
-            retention=logs.RetentionDays.THREE_MONTHS,
+            cluster_name=self.object_name,
+            container_insights=True,
+            vpc=stack.vpc_airflow,
         )

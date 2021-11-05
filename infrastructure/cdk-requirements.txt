@@ -1,5 +1,12 @@
-aws-cdk.core==1.94.1
-aws-cdk.aws_iam==1.94.1
-aws-cdk.aws-logs==1.94.1
-aws-cdk.aws-ec2==1.94.1
-aws-cdk.aws-ssm==1.94.1
+aws-cdk.core==1.124.0
+aws-cdk.aws_iam==1.124.0
+aws-cdk.aws-logs==1.124.0
+aws-cdk.aws-ec2==1.124.0
+aws-cdk.aws-ssm==1.124.0
+aws-cdk.aws-rds==1.124.0
+aws-cdk.aws-elasticache==1.124.0
+aws-cdk.aws-ecs==1.124.0
+aws-cdk.aws_ecs_patterns==1.124.0
+aws-cdk.aws_elasticloadbalancingv2==1.124.0
+aws-cdk.aws_route53==1.124.0
+aws-cdk.aws_certificatemanager==1.124.0

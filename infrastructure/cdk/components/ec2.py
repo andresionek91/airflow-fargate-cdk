@@ -1,18 +1,20 @@
+from __future__ import annotations
+
 import aws_cdk.core as core
 from aws_cdk import aws_ec2 as ec2
 
+# To avoid circular dependency when importing AirflowStack
+from typing import TYPE_CHECKING
 
-class AirflowVPC(ec2.Vpc):
+if TYPE_CHECKING:
+    from stack import AirflowStack
+
+
+class VpcAirflow(ec2.Vpc):
     """
-    Creates role to be assumed by ECS tasks
+    Creates VPC
     """
 
-    def __init__(self, scope: core.Construct, **kwargs) -> None:
-        self.deploy_env = scope.deploy_env
-        self.object_name = f"{self.deploy_env}-airflow-vpc"
-        super().__init__(
-            scope,
-            id=self.object_name,
-            vpn_gateway=False,
-            nat_gateways=0,
-        )
+    def __init__(self, stack: AirflowStack, **kwargs) -> None:
+        self.object_name = f"{stack.deploy_env}-airflow-vpc"
+        super().__init__(stack, id=self.object_name)
